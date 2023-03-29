@@ -20,6 +20,11 @@ function ClientRegistration() {
     function handleSubmit(event: any){
       event.preventDefault()
 
+      if (checarBranco()){
+        alert("Campos em branco!")
+        return
+      }
+
       if (!checarNome(dadosCliente.nome)){
         alert("O nome inserido é muito pequeno!")
         return
@@ -32,6 +37,10 @@ function ClientRegistration() {
     function checarNome(nome: string){
       const NomeSeparado = nome.trim().split(/\s+/);
       return ((nome.length >3 ) && (NomeSeparado.length > 1))
+    }
+
+    function checarBranco(){
+      return ((dadosCliente.nome==='' || dadosCliente.cnpj==='' || dadosCliente.nivelDesconto === ''))
     }
 
     function handleSelectedDiscountLevel(event: any){
@@ -66,7 +75,7 @@ function ClientRegistration() {
         <br />
 
         <label htmlFor='nivelDescont'>Nível de desconto: <br /></label>
-        <select onChange={handleSelectedDiscountLevel} id="nivelDesconto" data-testid="nivelDesconto">
+        <select onChange={handleSelectedDiscountLevel} id="nivelDesconto" data-testid="nivelDesconto" defaultValue="0">
               <option value='0' disabled> Nível </option>
                      {niveisDesconto.map((nivel, index) => {
                             return (
