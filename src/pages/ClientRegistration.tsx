@@ -1,8 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { AxiosInstance } from 'axios';
 import '../App.css';
-import { useState } from 'react'
 
-function ClientRegistration() {
+type IArea = {
+    id: number;
+    name: string;
+}
+type Params = {
+    api:AxiosInstance
+}
+
+
+function ClientRegistration(params: Params) {
   const [dadosCliente, setDadosCliente] = useState({ 
       nome: '', 
       cnpj: '', 
@@ -10,6 +19,20 @@ function ClientRegistration() {
       area: '' 
     });
 
+    const [areas, setAreas] = useState<IArea[]>([])
+
+    useEffect (() => {
+        params.api.get('api/areas/')
+            .then((response) => {
+                console.log(response);
+                setAreas(response.data)
+            })
+            .catch((err) => {
+                console.error('Ocorreu um erro ao receber os dados da API')
+                console.log(err)
+            });
+
+    }, [])
     const niveisDesconto = [
        {id:1, nome:'prata'}, 
        {id:2, nome:'ouro'}, 
@@ -48,6 +71,11 @@ function ClientRegistration() {
 
         setDadosCliente({ ...dadosCliente, nivelDesconto: niveisDesconto[position].nome });
     }
+    function handleSelectedArea(event: any){
+       let position = event.target.value;
+
+        setDadosCliente({ ...dadosCliente, area: areas[position].name });
+    }
 
     useEffect(() => {
         console.log(dadosCliente)
@@ -81,6 +109,18 @@ function ClientRegistration() {
                             return (
                                    <option value={index} key={index}>
                                          {nivel.nome}
+                                   </option>
+                            );
+                     })}
+       </select>
+       <br />
+        <label htmlFor='area'>Área: <br /></label>
+        <select onChange={handleSelectedArea} id="area" data-testid="area" defaultValue="0">
+              <option value='0' disabled>Área</option>
+                     {areas.map((nivel, index) => {
+                            return (
+                                   <option value={index} key={index}>
+                                         {nivel.name}
                                    </option>
                             );
                      })}

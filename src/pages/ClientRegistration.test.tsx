@@ -1,10 +1,11 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import ClientRegistration from './ClientRegistration';
+import api_axios from '../api'
 
 describe('Render Test', () => {
     it('renders register page without crashing', ()=> {
-        render(<ClientRegistration />)
+        render(<ClientRegistration api = {api_axios}/>)
         expect(screen.getByTestId('nome')).toBeInTheDocument()
         expect(screen.getByTestId('cnpj')).toBeInTheDocument()
         expect(screen.getByTestId('nivelDesconto')).toBeInTheDocument()
@@ -15,7 +16,7 @@ describe('Render Test', () => {
 describe('RegisterTest', () => {
     it('testa se o os campos estão em branco', () => {
       window.alert = jest.fn()
-      render(<ClientRegistration />);
+      render(<ClientRegistration api = {api_axios}/>);
       const nomeInput = screen.getByTestId('nome') as HTMLInputElement;
       const cnpjInput = screen.getByTestId('cnpj') as HTMLInputElement;
       const botaoCadastrar = screen.getByTestId('botaoCadastrar') as HTMLButtonElement;
@@ -30,7 +31,7 @@ describe('RegisterTest', () => {
     });
     it('testa se o nome é pequeno', () => {
       window.alert = jest.fn()
-      render(<ClientRegistration />);
+      render(<ClientRegistration api = {api_axios}/>);
       const nomeInput = screen.getByTestId('nome') as HTMLInputElement;
       const cnpjInput = screen.getByTestId('cnpj') as HTMLInputElement;
       const descontoInput = screen.getByTestId('nivelDesconto') as HTMLSelectElement;
@@ -46,7 +47,7 @@ describe('RegisterTest', () => {
     });
     it('testa se o nome tem menos de 2 palavras', () => {
       window.alert = jest.fn()
-      render(<ClientRegistration />);
+      render(<ClientRegistration api = {api_axios}/>);
       const nomeInput = screen.getByTestId('nome') as HTMLInputElement;
       const cnpjInput = screen.getByTestId('cnpj') as HTMLInputElement;
       const descontoInput = screen.getByTestId('nivelDesconto') as HTMLSelectElement;
@@ -62,7 +63,7 @@ describe('RegisterTest', () => {
     });
     it('testa se o nome esta ok', () => {
       window.alert = jest.fn()
-      render(<ClientRegistration />);
+      render(<ClientRegistration api = {api_axios}/>);
       const nomeInput = screen.getByTestId('nome') as HTMLInputElement;
       const cnpjInput = screen.getByTestId('cnpj') as HTMLInputElement;
       const descontoInput = screen.getByTestId('nivelDesconto') as HTMLSelectElement;

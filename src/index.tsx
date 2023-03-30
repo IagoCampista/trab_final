@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import ClientRegistration from './pages/ClientRegistration';
+import api_axios from './api'
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -11,7 +12,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     {/* <App /> */}
-    <ClientRegistration />
+    <ClientRegistration api = {api_axios}/>
   </React.StrictMode>
 );
 
