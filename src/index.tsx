@@ -7,6 +7,7 @@ import ClientRegistration from './pages/ClientRegistration';
 import api_axios from './api'
 import Catalogo from './pages/Catalog';
 import {BrowserRouter, Route, Routes } from 'react-router-dom';
+import SignIn from './pages/SignIn';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -17,6 +18,7 @@ root.render(
       <Routes>
         <Route path="/" element={<ClientRegistration api = {api_axios}/>} />
         <Route path="/catalogo" element={<Catalogo api = {api_axios}/>} />
+        <Route path="/sigin" element={<SignIn/>} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
