@@ -13,7 +13,7 @@ describe('Render Test', () => {
        })
 })
 
-describe('RegisterTest', () => {
+describe('Register Test', () => {
     it('testa se o os campos estão em branco', () => {
       window.alert = jest.fn()
       render(<ClientRegistration api = {api_axios}/>);

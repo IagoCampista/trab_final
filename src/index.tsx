@@ -18,7 +18,7 @@ root.render(
       <Routes>
         <Route path="/" element={<ClientRegistration api = {api_axios}/>} />
         <Route path="/catalogo" element={<Catalogo api = {api_axios}/>} />
-        <Route path="/sigin" element={<SignIn/>} />
+        <Route path="/login" element={<SignIn/>} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

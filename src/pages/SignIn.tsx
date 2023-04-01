@@ -1,10 +1,8 @@
 import React from 'react';
 import '../App.css';
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
 
 function SignIn() {
-    const navigate =useNavigate();
 
   const [dadosUsuario, setDadosUsuario] = useState({ 
       email: '', 
@@ -13,16 +11,17 @@ function SignIn() {
 
     function handleSubmit(event: any){
       event.preventDefault()
-        navigate('/signup');
+
+      if (checarBranco()){
+        alert("Campos em branco!")
+        return
+      }
       console.log(dadosUsuario)
 
     }
 
-    function checarSenhaValida(senha: string): boolean {
-      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-      console.log(regex.test(senha));
-      return !regex.test(senha);
-      
+    function checarBranco(){
+      return ((dadosUsuario.email==='' || dadosUsuario.senha===''))
     }
 
   return (
