@@ -8,6 +8,7 @@ import api_axios from './api'
 import Catalogo from './pages/Catalog';
 import {BrowserRouter, Route, Routes } from 'react-router-dom';
 import SignIn from './pages/SignIn';
+import ClientList from './pages/ClientList';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -19,6 +20,7 @@ root.render(
         <Route path="/" element={<ClientRegistration api = {api_axios}/>} />
         <Route path="/catalogo" element={<Catalogo api = {api_axios}/>} />
         <Route path="/login" element={<SignIn/>} />
+        <Route path="/clientList" element={<ClientList api = {api_axios}/>} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
