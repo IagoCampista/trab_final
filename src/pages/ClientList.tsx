@@ -49,7 +49,8 @@ export default function ClientList (params: Params){
     return (
         <div>
               <h1>Lista de Clientes</h1>
-              <table data-testid="tabelaClientes">
+              {clientes.length === 0 ? (<p>Nenhum cliente encontrado</p>) : (
+                <table data-testid="tabelaClientes">
                      <thead>
                             <tr>
                                    <th>id</th>
@@ -76,6 +77,8 @@ export default function ClientList (params: Params){
                                    
                      </tbody>
               </table>
+              )}
+              
         </div>
     )
 }

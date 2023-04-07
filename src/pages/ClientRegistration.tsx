@@ -83,6 +83,7 @@ function ClientRegistration(params: Params) {
 
   return (
     <div className="App">
+      <h1>Registro de Clientes</h1>
       <form>
         <label htmlFor="nome">Nome:<br />
         <input type="text" id="nome" name="nome" data-testid="nome"

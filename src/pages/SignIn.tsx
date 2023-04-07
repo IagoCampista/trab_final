@@ -16,18 +16,28 @@ function SignIn() {
         alert("Campos em branco!")
         return
       }
+
+      if (!checarEmail(dadosUsuario.email)) {
+        alert("Email inválido!")
+        return
+      }
       console.log(dadosUsuario)
 
     }
 
-    function checarBranco(){
+    function checarBranco(): boolean{
       return ((dadosUsuario.email==='' || dadosUsuario.senha===''))
+    }
+
+    function checarEmail(email: string) : boolean{
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      return re.test(email)
     }
 
   return (
     <div className="App">
+      <h1>Login</h1>
       <form>
-              
         <label htmlFor="email">E-mail:
         <input type="email" id="email" name="email" data-testid="email"
            value={dadosUsuario.email}

@@ -17,7 +17,6 @@ export default function Catalogo (params: Params){
     useEffect (() => {
         params.api.get('api/produtos/')
             .then((response) => {
-                console.log(response);
                 setProdutos(response.data)
             })
             .catch((err) => {
@@ -30,7 +29,8 @@ export default function Catalogo (params: Params){
     return (
         <div>
               <h1>Catalogo de Produtos</h1>
-              <table>
+              {produtos.length === 0 ? (<p>Nenhum produto encontrado</p>) :(
+                <table data-testid='TabelaProdutos'>
                      <thead>
                             <tr>
                                    <th>id</th>
@@ -42,8 +42,8 @@ export default function Catalogo (params: Params){
                      </thead>
                      <tbody>
 
-                            {produtos.map(produto => (
-                                   <tr>
+                            {produtos.map((produto, index)  => (
+                                   <tr key={index}>
                                           <td>{produto.id}</td>
                                           <td>{produto.name}</td>
                                           <td>{produto.id_categoria}</td>
@@ -54,6 +54,8 @@ export default function Catalogo (params: Params){
                                    
                      </tbody>
               </table>
+              )}
+              
         </div>
     )
 }

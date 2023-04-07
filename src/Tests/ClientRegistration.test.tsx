@@ -1,10 +1,10 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import ClientRegistration from './ClientRegistration';
+import ClientRegistration from '../pages/ClientRegistration';
 import api_axios from '../api'
 
 describe('Render Test', () => {
-    it('renders register page without crashing', ()=> {
+    it('renderiza a pagina de registro de clientes', ()=> {
         render(<ClientRegistration api = {api_axios}/>)
         expect(screen.getByTestId('nome')).toBeInTheDocument()
         expect(screen.getByTestId('cnpj')).toBeInTheDocument()
