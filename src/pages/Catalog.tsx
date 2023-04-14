@@ -24,8 +24,8 @@ export default function Catalogo (params: Params){
     useEffect (() => {
         params.api.get('api/produtos/')
             .then((response) => {
-                setProdutos(response.data)
-                setProdutosComFiltro(response.data)
+                setProdutos(JSON.parse(response.data) as IProduto[])
+                setProdutosComFiltro(JSON.parse(response.data) as IProduto[])
             })
             .catch((err) => {
                 console.error('Ocorreu um erro ao receber os dados da API')
