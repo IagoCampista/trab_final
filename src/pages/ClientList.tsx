@@ -5,7 +5,7 @@ import React, {useEffect, useState} from 'react'
 
 type ICliente = {
     id: number;
-    name: string;
+    nome: string;
     cnpj: string;
     nivelDesconto: string;
     area: number;
@@ -26,7 +26,7 @@ export default function ClientList (params: Params){
     useEffect (() => {
         params.api.get('api/clientes/')
             .then((response) => {
-              setClientes(response.data)
+              setClientes(JSON.parse(response.data) as ICliente[])
             })
             .catch((err) => {
                 console.error('Ocorreu um erro ao receber os dados dos clientes da API')
@@ -45,6 +45,22 @@ export default function ClientList (params: Params){
                 console.log(err)
             });
     }, [])
+
+    function handleUpdateProspectionDate (cnpj: string) {
+        const cnpjData = {cnpj}
+        params.api.post('/api/updateProspectionDate', cnpjData)
+        .then(async (response) => {
+        console.log(response.data);
+        if(response.status == 200){
+            alert('Data Atualizada com sucesso!');
+        }
+        })
+        .catch((error) => {
+        console.log(error.response?.statusText as string);
+        alert('Ocorreu um erro ao atualizar a data de prospecção');
+        })
+        window.location.reload();
+    }
 
     return (
         <div>
@@ -66,12 +82,12 @@ export default function ClientList (params: Params){
                             {clientes.map((cliente, index) => (
                                    <tr key={index}>
                                           <td>{cliente.id}</td>
-                                          <td>{cliente.name}</td>
+                                          <td>{cliente.nome}</td>
                                           <td>{cliente.cnpj}</td>
                                           <td>{cliente.nivelDesconto}</td>
                                           <td>{cliente.dataUltimaProspeccao.toString()}</td>
-                                          <td>{cliente.area}</td>
-                                          
+                                          <td>{cliente.area}</td>                                          
+                                          <td><button type="button" data-testid="botaoAtualizarData" onClick={() => handleUpdateProspectionDate(cliente.cnpj)}>Atualizar Data Prospecção</button></td>                                          
                                    </tr>
                             ))}
                                    

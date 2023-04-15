@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AxiosInstance } from 'axios';
 import '../App.css';
+import delay from '../delay';
 
 type IArea = {
     id: number;
@@ -16,7 +17,8 @@ function ClientRegistration(params: Params) {
       nome: '', 
       cnpj: '', 
       nivelDesconto: '', 
-      area: '' 
+      area: '',
+      dataUltimaProspeccao: new Date().toISOString().slice(0, 10)
     });
 
     const [areas, setAreas] = useState<IArea[]>([])
@@ -55,6 +57,17 @@ function ClientRegistration(params: Params) {
 
       console.log(dadosCliente)
 
+      params.api.post('/api/registerClientes', dadosCliente)
+      .then(async (response) => {
+        console.log(response.data);
+        if(response.status == 200){
+          alert('Cliente adicionado com sucesso');
+        }
+      })
+      .catch((error) => {
+        console.log(error.response?.statusText as string);
+        alert('Ocorreu um erro ao adicionar o cliente');
+      })
     }
 
     function checarNome(nome: string){
