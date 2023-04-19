@@ -2,13 +2,36 @@ import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import api_axios from '../api'
 import SignUp from '../pages/SignUp';
+import { MemoryRouter } from 'react-router-dom';
 
 const mockApi = { get: jest.fn(), post: jest.fn() };
 
+describe('Already Logged test', () => {
+    it('renderiza a de aviso que ja esta logado ', () => {
+    // Define o mock da chave "authToken" no localStorage
+      Object.defineProperty(window.localStorage, 'authToken', {
+        value: 'anyToken',
+        writable: true,
+      });
+    render(<MemoryRouter><SignUp api={api_axios}/></MemoryRouter>)  
+  
+    const loggedMessage = screen.getByTestId('alreadyLoggedMessage');
+    expect(loggedMessage).toBeInTheDocument();
+
+  });
+})
+
 describe('SignUp tests', () => {
+  beforeEach(() => {
+    // Define o mock da chave "authToken" no localStorage
+      Object.defineProperty(window.localStorage, 'authToken', {
+        value: '',
+        writable: true,
+      });
+  });
   
   it('renderiza a pagina de cadastro ', () => {
-    render(<SignUp api = {api_axios}/>)  
+    render(<MemoryRouter><SignUp api={api_axios}/></MemoryRouter>)  
     const title = screen.getByText('Cadastro de Vendedor');
     expect(title).toBeInTheDocument();
 
@@ -27,7 +50,7 @@ describe('SignUp tests', () => {
 
   it('nao mostra os alertas se os campos estão ok', () => {
        window.alert = jest.fn()
-    render(<SignUp api = {api_axios}/>)
+    render(<MemoryRouter><SignUp api={api_axios}/></MemoryRouter>)
     const nomeInput = screen.getByTestId('nome');
     fireEvent.change(nomeInput, { target: { value: 'João Silva' } });
 
@@ -45,7 +68,7 @@ describe('SignUp tests', () => {
 
   it('mostra o alerta caso algum campo esteja em branco', () => {
     window.alert = jest.fn()
-    render(<SignUp api={api_axios} />);
+    render(<MemoryRouter><SignUp api={api_axios}/></MemoryRouter>);
     const submitButton = screen.getByTestId('botaoCadastrar');
 
     fireEvent.click(submitButton);
@@ -55,7 +78,7 @@ describe('SignUp tests', () => {
 
   it('mostra o alerta se o email é inválido', () => {
       window.alert = jest.fn()
-      render(<SignUp api={api_axios} />);
+      render(<MemoryRouter><SignUp api={api_axios}/></MemoryRouter>);
       const emailInput = screen.getByTestId('email') as HTMLInputElement;
       const senhaInput = screen.getByTestId('senha') as HTMLInputElement;
       const nomeInput = screen.getByTestId('nome') as HTMLInputElement;
@@ -82,7 +105,7 @@ describe('SignUp tests', () => {
 
     it('nao mostra o alerta se o email é válido', () => {
       window.alert = jest.fn()
-      render(<SignUp api={api_axios} />);
+      render(<MemoryRouter><SignUp api={api_axios}/></MemoryRouter>);
       const emailInput = screen.getByTestId('email') as HTMLInputElement;
       const senhaInput = screen.getByTestId('senha') as HTMLInputElement;
       const nomeInput = screen.getByTestId('nome') as HTMLInputElement;
@@ -98,7 +121,7 @@ describe('SignUp tests', () => {
     
     it('mostra o alerta se o nome é muito pequeno', () => {
     window.alert = jest.fn()
-    render(<SignUp api={api_axios} />);
+    render(<MemoryRouter><SignUp api={api_axios}/></MemoryRouter>);
     const emailInput = screen.getByTestId('email') as HTMLInputElement;
     const senhaInput = screen.getByTestId('senha') as HTMLInputElement;
     const nomeInput = screen.getByTestId('nome') as HTMLInputElement;
@@ -122,7 +145,7 @@ describe('SignUp tests', () => {
 
     it('nao mostra o alerta se o nome está ok', () => {
     window.alert = jest.fn()
-    render(<SignUp api={api_axios} />);
+    render(<MemoryRouter><SignUp api={api_axios}/></MemoryRouter>);
     const emailInput = screen.getByTestId('email') as HTMLInputElement;
     const senhaInput = screen.getByTestId('senha') as HTMLInputElement;
     const nomeInput = screen.getByTestId('nome') as HTMLInputElement;
@@ -133,8 +156,7 @@ describe('SignUp tests', () => {
     fireEvent.change(senhaInput, { target: { value: 'senha123' } });
     fireEvent.click(botaoCadastrar);
 
-    expect(window.alert).not.toHaveBeenCalledWith();
+    expect(window.alert).not.toHaveBeenCalledWith('Cliente adicionado com sucesso');
   });
-
  
 });

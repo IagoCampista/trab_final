@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { AxiosInstance } from 'axios';
 import '../App.css';
+import { Link } from 'react-router-dom';
 
-type IArea = {
-    id: number;
-    name: string;
-}
 type Params = {
     api:AxiosInstance
 }
 
 
 function SignUp(params: Params) {
+  const [isLogged, setIsLogged] = useState(false); 
   const [dadosVendedor, setDadosVendedor] = useState({ 
       nome: '', 
       email: '', 
       senha: ''
     });
+    
+    useEffect(() => {
+    let authtoken = localStorage.getItem('authToken');
+    if (authtoken === '' || authtoken === null){
+        setIsLogged(false);
+        return
+    }
+    setIsLogged(true);
+  }, []);
 
     function handleSubmit(event: any){
       event.preventDefault()
@@ -36,8 +43,15 @@ function SignUp(params: Params) {
         return
       }
 
-      console.log(dadosVendedor)
-
+      params.api.post('/api/registerVendedores', dadosVendedor)
+      .then(async (response) => {
+        if(response.status === 200){
+          alert('Cliente adicionado com sucesso');
+        }
+      })
+      .catch((error) => {
+        alert('Ocorreu um erro ao adicionar o cliente!   ' + error.response?.statusText as string);
+      })
     }
 
     function checarNome(nome: string){
@@ -54,44 +68,49 @@ function SignUp(params: Params) {
       return re.test(email)
     }
 
-    useEffect(() => {
-        console.log(dadosVendedor)
-    }, [dadosVendedor]);
+    if(isLogged){
+      return(
+        <div className="App">
+          <h1>Cadastro de Vendedor</h1>
+          <h2 data-testid="alreadyLoggedMessage">Você já está logado!</h2>
+        </div>
+      )
+    }
+    else{
+      return (
+        <div className="App">
+          <h1>Cadastro de Vendedor</h1>
+          <form>
+            <label htmlFor="nome">Nome:<br />
+            <input type="text" id="nome" name="nome" data-testid="nome"
+              value={dadosVendedor.nome}
+              onChange={e => setDadosVendedor({ ...dadosVendedor, nome: e.target.value })}/>
+            </label>
+            <br />
 
-  return (
-    <div className="App">
-       <h1>Cadastro de Vendedor</h1>
-      <form>
-        <label htmlFor="nome">Nome:<br />
-        <input type="text" id="nome" name="nome" data-testid="nome"
-          value={dadosVendedor.nome}
-          onChange={e => setDadosVendedor({ ...dadosVendedor, nome: e.target.value })}/>
-        </label>
-        {dadosVendedor.nome}
-        <br />
+            <label htmlFor="email">Email:<br />
+            <input type="text" id="email" name="email" data-testid="email"
+              value={dadosVendedor.email}
+              onChange={e => setDadosVendedor({ ...dadosVendedor, email: e.target.value})}/>
+            </label>
+            <br />
 
-        <label htmlFor="email">Email:<br />
-        <input type="text" id="email" name="email" data-testid="email"
-           value={dadosVendedor.email}
-           onChange={e => setDadosVendedor({ ...dadosVendedor, email: e.target.value})}/>
-        </label>
-        {dadosVendedor.email}
-        <br />
+            <label htmlFor="senha">Senha:<br />
+            <input type="password" id="senha" name="senha" data-testid="senha"
+              value={dadosVendedor.senha}
+              onChange={e => setDadosVendedor({ ...dadosVendedor, senha: e.target.value})}/>
+            </label>
+            <br />
+          <br />
+          
 
-        <label htmlFor="senha">Senha:<br />
-        <input type="text" id="senha" name="senha" data-testid="senha"
-           value={dadosVendedor.email}
-           onChange={e => setDadosVendedor({ ...dadosVendedor, senha: e.target.value})}/>
-        </label>
-        {dadosVendedor.senha}
-        <br />
-       <br />
-       
-
-        <button type="submit" data-testid="botaoCadastrar" onClick={handleSubmit}>Cadastrar</button>
-      </form>
-    </div>
-  )
+            <button type="submit" data-testid="botaoCadastrar" onClick={handleSubmit}>Cadastrar</button>
+          </form>
+          <p>Já é cadastrado? <Link to='/' data-testid='linkLogin'>Entre</Link></p>
+        </div>
+      )
+    }
 }
+  
 
 export default SignUp
