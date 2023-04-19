@@ -14,14 +14,14 @@ describe('NavBar Tests', () => {
     const linkCatalogo = screen.getByTestId('linkCatalogo');
     const linkClientes = screen.getByTestId('linkClientes');
     const linkRegistroCliente = screen.getByTestId('linkRegistroCliente');
-    const linkRegistroArea = screen.getByTestId('linkRegistroArea');
+    const linkProfile = screen.getByTestId('linkProfile');
     const linkCadastro = screen.getByTestId('linkCadastro');
     const linkLogin = screen.getByTestId('linkLogin');
 
     expect(linkCatalogo).toBeInTheDocument();
     expect(linkClientes).toBeInTheDocument();
     expect(linkRegistroCliente).toBeInTheDocument();
-    expect(linkRegistroArea).toBeInTheDocument();
+    expect(linkProfile).toBeInTheDocument();
     expect(linkCadastro).toBeInTheDocument();
     expect(linkLogin).toBeInTheDocument();
   });
@@ -41,8 +41,8 @@ describe('NavBar Tests', () => {
     const linkRegistroCliente = screen.getByTestId('linkRegistroCliente');
     expect(linkRegistroCliente).toHaveAttribute('href', '/clientRegistration');
 
-    const linkRegistroArea = screen.getByTestId('linkRegistroArea');
-    expect(linkRegistroArea).toHaveAttribute('href', '/areaRegistration');
+    const linkProfile = screen.getByTestId('linkProfile');
+    expect(linkProfile).toHaveAttribute('href', '/profile');
 
     const linkCadastro = screen.getByTestId('linkCadastro');
     expect(linkCadastro).toHaveAttribute('href', '/signUp');

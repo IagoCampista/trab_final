@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import ClientRegistration from './pages/ClientRegistration';
 import api_axios from './api'
@@ -11,7 +10,7 @@ import SignIn from './pages/SignIn';
 import ClientList from './pages/ClientList';
 import NavBar from './navBar';
 import SignUp from './pages/SignUp';
-import AreaRegistration from './pages/areaRegistration';
+import Profile from './pages/Profile';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -22,9 +21,9 @@ root.render(
     <NavBar />
       <Routes>
         <Route path="/clientRegistration" element={<ClientRegistration api = {api_axios}/>} />
-        <Route path="/areaRegistration" element={<AreaRegistration api = {api_axios}/>} />
+        <Route path="/profile" element={<Profile api = {api_axios}/>} />
         <Route path="/catalogo" element={<Catalogo api = {api_axios}/>} />
-        <Route path="/" element={<SignIn/>} />
+        <Route path="/" element={<SignIn api = {api_axios}/>} />
         <Route path="/clientList" element={<ClientList api = {api_axios}/>} />
         <Route path="/signUp" element={<SignUp api = {api_axios}/>} />
       </Routes>
