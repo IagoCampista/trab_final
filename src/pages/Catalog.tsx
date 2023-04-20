@@ -1,5 +1,6 @@
 import { AxiosInstance } from 'axios';
 import React, {useEffect, useState} from 'react'
+import { Link } from 'react-router-dom';
 
 type IProduto = {
     id: number;
@@ -18,10 +19,18 @@ type Params = {
 }
 
 export default function Catalogo (params: Params){
+    const [isLogged, setIsLogged] = useState(false);
     const [produtos, setProdutos] = useState<IProduto[]>([])
     const [produtosComFiltro, setProdutosComFiltro] = useState<IProduto[]>([])
     const [categorias, setCategorias] = useState<ICategoria[]>([])
+
     useEffect (() => {
+        let authtoken = localStorage.getItem('authToken');
+        if (authtoken === '' || authtoken === null){
+            setIsLogged(false);
+            return
+        }
+        setIsLogged(true);
         params.api.get('api/produtos/')
             .then((response) => {
                 setProdutos(JSON.parse(response.data) as IProduto[])
@@ -32,7 +41,7 @@ export default function Catalogo (params: Params){
                 console.log(err)
             });
 
-    }, [])
+    }, [params.api])
 
     useEffect (() => {
         params.api.get('api/categorias')
@@ -43,19 +52,21 @@ export default function Catalogo (params: Params){
                 console.error('Ocorreu um erro ao receber os dados da API')
                 console.log(err)
             });
-    }, [])
+    }, [params.api])
 
     async function handleFiltroCategoria(event: any){
-        let categoria = event.target.value;
-        if(categoria != 0){
-            const produtosFiltrados = produtos.filter((produto) => produto.id_categoria == categoria);
+        let categoria = Number(event.target.value);
+        if(categoria !== 0){
+            const produtosFiltrados = produtos.filter((produto) => produto.id_categoria === categoria);
             setProdutosComFiltro(produtosFiltrados);
         }
         else (setProdutosComFiltro(produtos))
         
     }
-    return (
-        <div>
+
+    if(isLogged){
+        return (
+        <div className='App'>
               <h1>Catalogo de Produtos</h1>
                <form>
                 <label htmlFor="filtroCategoriaInput">Categoria:</label>
@@ -71,7 +82,9 @@ export default function Catalogo (params: Params){
                 </select>
                </form>
               {produtos.length === 0 ? (<p>Nenhum produto encontrado</p>) :(
-                <table data-testid='TabelaProdutos'>
+                <table 
+                    data-testid='TabelaProdutos' 
+                    style={{margin: 'auto',  paddingBottom: '3rem',}}>
                      <thead>
                             <tr>
                                    <th>id</th>
@@ -95,8 +108,32 @@ export default function Catalogo (params: Params){
                                    
                      </tbody>
               </table>
-              )}
-              
+              )}              
         </div>
     )
+    }
+    else{
+        return (
+            <div className='App'>
+                <h1 data-testid='notLoggedMessage'>Voce não está logado</h1>
+                <Link 
+                    to='/' 
+                    data-testid='linkLogin'
+                    style={{
+                    backgroundColor: 'lightGrey',
+                    color: 'black',
+                    padding: '10px',
+                    textDecoration: 'none',
+                    borderRadius: '5px',
+                    display: 'inline-block',
+                    textAlign: 'center',
+                    }}
+                >
+                    Login
+                </Link>
+                <br />
+            </div>
+        )
+    }
+    
 }

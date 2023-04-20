@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AxiosInstance } from 'axios';
+import { Link } from 'react-router-dom';
 import '../App.css';
-import delay from '../delay';
 
 type IArea = {
     id: number;
@@ -13,6 +13,7 @@ type Params = {
 
 
 function ClientRegistration(params: Params) {
+  const [isLogged, setIsLogged] = useState(false);
   const [dadosCliente, setDadosCliente] = useState({ 
       nome: '', 
       cnpj: '', 
@@ -26,7 +27,6 @@ function ClientRegistration(params: Params) {
     useEffect (() => {
         params.api.get('api/areas/')
             .then((response) => {
-                console.log(response);
                 setAreas(response.data)
             })
             .catch((err) => {
@@ -34,7 +34,17 @@ function ClientRegistration(params: Params) {
                 console.log(err)
             });
 
-    }, [])
+    }, [params.api])
+
+    useEffect (() => {
+        let authtoken = localStorage.getItem('authToken');
+        if (authtoken === '' || authtoken === null){
+            setIsLogged(false);
+            return
+        }
+        setIsLogged(true);
+    }, [params.api])
+
     const niveisDesconto = [
        {id:1, nome:'prata'}, 
        {id:2, nome:'ouro'}, 
@@ -55,18 +65,16 @@ function ClientRegistration(params: Params) {
         return
       }
 
-      console.log(dadosCliente)
-
       params.api.post('/api/registerClientes', dadosCliente)
       .then(async (response) => {
         console.log(response.data);
-        if(response.status == 200){
+        if(response.status === 200){
           alert('Cliente adicionado com sucesso');
         }
       })
       .catch((error) => {
-        console.log(error.response?.statusText as string);
-        alert('Ocorreu um erro ao adicionar o cliente');
+        // console.log(error.response?.statusText as string);
+        alert('Ocorreu um erro ao adicionar o cliente' + error.response?.statusText as string);
       })
     }
 
@@ -76,7 +84,7 @@ function ClientRegistration(params: Params) {
     }
 
     function checarBranco(){
-      return ((dadosCliente.nome==='' || dadosCliente.cnpj==='' || dadosCliente.nivelDesconto === ''))
+      return ((dadosCliente.nome==='' || dadosCliente.cnpj==='' || dadosCliente.nivelDesconto === '' || dadosCliente.area === ''))
     }
 
     function handleSelectedDiscountLevel(event: any){
@@ -90,10 +98,7 @@ function ClientRegistration(params: Params) {
         setDadosCliente({ ...dadosCliente, area: areas[position].name });
     }
 
-    useEffect(() => {
-        console.log(dadosCliente)
-    }, [dadosCliente]);
-
+    
   return (
     <div className="App">
       <h1>Registro de Clientes</h1>

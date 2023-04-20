@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { render, waitFor, screen } from '@testing-library/react';
 import Catalogo from '../pages/Catalog';
+import { BrowserRouter } from 'react-router-dom';
+
+const mockApi = { get: jest.fn(), post: jest.fn() };
 
 describe('Catalog Tests', () => {
   const mockProdutos = [
@@ -27,7 +30,15 @@ describe('Catalog Tests', () => {
   it('renderiza as tabelas com os produtos', async () => {
     jest.spyOn(mockApi, 'get').mockResolvedValue({ data: mockProdutos });
 
-    render(<Catalogo api={mockApi} />);
+    // Define o mock da chave "authToken" no localStorage
+    Object.defineProperty(window.localStorage, 'authToken', {
+      value: 'mock-token',
+      writable: true,
+    });
+    render(
+      <BrowserRouter>
+        <Catalogo api={mockApi} />
+      </BrowserRouter>);
 
     // espera a tabela ser renderizada
     await waitFor(() => {
@@ -36,10 +47,34 @@ describe('Catalog Tests', () => {
     });
   });
 
+  it('renderiza o aviso se nao estiver logado', async () => {
+    jest.spyOn(mockApi, 'get').mockResolvedValue({ data: mockProdutos });
+    
+    // Define o mock da chave "authToken" no localStorage como vazio para simular o usuario nao estar logado
+    Object.defineProperty(window.localStorage, 'authToken', {
+      value: '',
+      writable: true,
+    });
+    render(
+      <BrowserRouter>
+        <Catalogo api={mockApi} />
+      </BrowserRouter>);
+
+    expect(screen.getByTestId('notLoggedMessage')).toBeInTheDocument();
+   
+  });
+
   it('mostra o aviso caso a lista de produtos esteja vazia', async () => {
-       jest.spyOn(mockApi, 'get').mockResolvedValue({ data: [] });
-       
-       render(<Catalogo api={mockApi} />);
+      jest.spyOn(mockApi, 'get').mockResolvedValue({ data: [] });
+      Object.defineProperty(window.localStorage, 'authToken', {
+          value: 'mock-token',
+          writable: true,
+        });
+      render(  
+        <BrowserRouter>
+          <Catalogo api={mockApi} />
+        </BrowserRouter>
+      );
        
        // espera a tabela ser renderizada
        await waitFor(() => {

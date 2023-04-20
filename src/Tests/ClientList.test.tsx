@@ -1,6 +1,10 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import axios from 'axios'
+import axios from 'axios';
+import api_axios from '../api';
 import ClientList from '../pages/ClientList';
+import { BrowserRouter } from 'react-router-dom';
+
+// const mockApi = { get: jest.fn(), post: jest.fn() };
 
 describe('ClientList Tests', () => {
   const mockClients = [
@@ -12,10 +16,13 @@ describe('ClientList Tests', () => {
     baseURL: 'http://localhost:3000/',
   });
 
-  it('renderiza as tabelas com os produtos', async () => {
+  it('renderiza as tabelas com os clientes', async () => {
     jest.spyOn(mockApi, 'get').mockResolvedValue({ data: mockClients });
 
-    render(<ClientList api={mockApi} />);
+    render(
+      <BrowserRouter>
+        <ClientList api={api_axios} />
+      </BrowserRouter>);
 
     // espera a tabela ser renderizada
     await waitFor(() => {
@@ -24,10 +31,10 @@ describe('ClientList Tests', () => {
     });
   });
 
-  it('mostra o aviso caso a lista de produtos esteja vazia', async () => {
+  it('mostra o aviso caso a lista de clientes esteja vazia', async () => {
        jest.spyOn(mockApi, 'get').mockResolvedValue({ data: [] });
        
-       render(<ClientList api={mockApi} />);
+       render( <BrowserRouter><ClientList api={api_axios} /></BrowserRouter>);
        
        // espera a tabela ser renderizada
        await waitFor(() => {
