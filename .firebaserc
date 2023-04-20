@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "trabalhofinal-d1739"
-  }
+    "default": "trabfinalvendedor",
+    "VendedorHosting": "trabfinalvendedor"
+  },
+  "targets": {},
+  "etags": {}
 }
