@@ -30,6 +30,8 @@ describe('Register Test', () => {
       expect(window.alert).toHaveBeenCalledWith('Campos em branco!');
     });
 
+    // estes testes pararam de funcionar depois
+
     // it('testa se o nome é pequeno', () => {
     //   window.alert = jest.fn()
     //   render(<ClientRegistration api = {api_axios}/>);
